@@ -1,7 +1,344 @@
-<html>
-	<head>
-	</head>
-	<body>
-		Homework 2 index.html here
-	</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>
+  body {
+    background-color: white;
+    padding: 100px;
+    width: 1000px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: #121212;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+  kbd {
+    color: #121212;
+  }
+</style>
+<title>CS 184 Mesh Edit</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+</head>
+
+
+<body>
+
+<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2018</h1>
+<h1 align="middle">Project 2: Mesh Edit</h1>
+<h2 align="middle">Helena Su and Aaron Zheng</h2>
+
+<br><br>
+
+<div>
+
+<h2 align="middle">Overview</h2>
+<p>
+    We worked on Bezier curves, mesh surfaces, mesh traveresal and important algorithm such as edge flip and loop subdivision for mesh upsampling. 
+</p>
+<br>
+
+
+<h2 align="middle">Section I: Bezier Curves and Surfaces</h2>
+
+<h3 align="middle">Part 1: Bezier Curves with 1D de Casteljau Subdivision</h3>
+
+
+<b>
+  Briefly explain de Casteljau's algorithm and how you implemented it in order to evaluate Bezier curves.
+</b>
+<p>
+    Given some control points, de Calsteljau algorithm takes the lerp of each line segment connecting the control points. Given the new (n-1) control points from lerp,
+    we can draw new line segments. After we do this several of times, we should end up with exactly 3 points and 2 lines. We lerp again, get 2 control points, end up with one line.
+    We lerp one last time and the point we get lies on the bezier curve defined by the control points. 
+    We implement lerp by step and call it multiple times in each level until we end up with one final point. 
+</p>
+<br>
+
+
+<b>
+  Take a look at the provided .bzc files and create your own Bezier curve with 6 control points of your choosing. Use this Bezier curve for your screenshots below.
+</b>
+
+<!-- Example of including a single figure -->
+<div align="middle">
+  <img src="images/Screenshot 2024-02-26 at 5.33.19 PM.jpg" align="middle" width="50%">
+</div>
+<br>
+
+<b>
+  Show screenshots of each step / level of the evaluation from the original control points down to the final evaluated point. Press <kbd>E</kbd> to step through. Toggle <kbd>C</kbd> to show the completed Bezier curve as well.
+</b>
+<!-- Example of including multiple figures -->
+<div align="middle">
+  <table style="width:100%">
+    <tr align="center">
+      <td>
+        <img src="images/Screenshot 2024-02-26 at 5.34.16 PM.jpg" align="middle" width="400px"/>
+        <figcaption>Level 0</figcaption>
+      </td>
+      <td>
+        <img src="images/Screenshot 2024-02-26 at 5.34.33 PM.jpg" align="middle" width="400px"/>
+        <figcaption>Level 1</figcaption>
+      </td>
+    </tr>
+    <br>
+    <tr align="center">
+      <td>
+        <img src="images/Screenshot 2024-02-26 at 5.34.51 PM.jpg" align="middle" width="400px"/>
+        <figcaption>Level 2</figcaption>
+      </td>
+      <td>
+        <img src="images/Screenshot 2024-02-26 at 5.35.06 PM.jpg" align="middle" width="400px"/>
+        <figcaption>Level 3</figcaption>
+      </td>
+      
+    </tr>
+    <br>
+    <tr align="center">
+      <td>
+        <img src="images/Screenshot 2024-02-26 at 5.35.26 PM.jpg" align="middle" width="400px"/>
+        <figcaption>Level 4</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
+<br>
+
+
+<b>
+  Show a screenshot of a slightly different Bezier curve by moving the original control points around and modifying the parameter \(t\) via mouse scrolling.
+</b>
+<div align="middle">
+  <img src="images/Screenshot 2024-02-26 at 5.36.47 PM.jpg " align="middle" width="50%">
+</div>
+
+<br>
+
+
+<h3 align="middle">Part 2: Bezier Surfaces with Separable 1D de Casteljau</h3>
+<b>
+  Briefly explain how de Casteljau algorithm extends to Bezier surfaces and how you implemented it in order to evaluate Bezier surfaces.
+</b>
+<p>
+    Now the control points are in a grid. For each row of control points, we perform de casteljau and get a bezier curve for each row.
+    We sweep a vertical line across the 4 horizontal bezier curves. The surface swept is the bezier surface.
+    Implementation is similar to Bezier curve. We add a few more calls to make extra bezier curves, and have to take into the 2d parameter u,v instead of t since we are in 2D now. 
+</p>
+<br>
+
+
+<b>
+  Show a screenshot of bez/teapot.bez (not .dae) evaluated by your implementation.
+</b>
+<div align="middle">
+  <img src="images/Screenshot 2024-02-26 at 5.43.15 PM.jpg " align="middle" width="50%">
+</div>
+
+<br>
+
+
+<h2 align="middle">Section II: Triangle Meshes and Half-Edge Data Structure</h2>
+
+<h3 align="middle">Part 3: Area-Weighted Vertex Normals</h3>
+
+<b>
+  Briefly explain how you implemented the area-weighted vertex normals.
+</b>
+<p>
+    We iterate through the halfedges, getting the positions of vertices, calculating area, crossproduct by utilizing the halfedge data structure to traverse mesh.
+</p>
+<br>
+
+
+<b>
+  Show screenshots of dae/teapot.dae (not .bez) comparing teapot shading with and without vertex normals. Use <kbd>Q</kbd> to toggle default flat shading and Phong shading.
+</b>
+<div align="middle">
+  <table style="width:100%">
+    <tr align="center">
+      <td>
+        <img src="images/Screenshot 2024-02-26 at 5.57.48 PM.jpg" align="middle" width="400px"/>
+        <figcaption>without vertex normal</figcaption>
+      </td>
+      <td>
+        <img src="images/Screenshot 2024-02-26 at 5.58.11 PM.jpg" align="middle" width="400px"/>
+        <figcaption>with vertex normal shading</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
+<br>
+<br>
+
+
+<h3 align="middle">Part 4: Edge Flip</h3>
+<b>
+  Briefly explain how you implemented the edge flip operation and describe any interesting implementation / debugging tricks you have used.
+</b>
+<p>
+    We traversed the mesh with halfedges and re-assign pointers by set neighbors function. We drew it out multiple times to make sure the pointer assignments are correct.
+</p>
+<br>
+
+
+<b>
+  Show screenshots of the teapot before and after some edge flips.
+</b
+<div align="middle">
+  <table style="width:100%">
+    <tr align="center">
+      <td>
+        <img src="images/Screenshot 2024-02-26 at 5.57.48 PM.jpg" align="middle" width="400px"/>
+        <figcaption>without fliip</figcaption>
+      </td>
+      <td>
+        <img src="images/Screenshot 2024-02-26 at 5.59.57 PM.jpg" align="middle" width="400px"/>
+        <figcaption>with flip</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
+<br>
+
+
+<b>
+    Write about your eventful debugging journey, if you have experienced one.
+</b>
+<p>
+    We initially tried to assign pointers without setting neighbors. Then we got confused on iter vs vertex and how to assign them. Then we read the doc and use setNeighnors.
+</p>
+<br>
+
+
+<h3 align="middle">Part 5: Edge Split</h3>
+<b>
+  Briefly explain how you implemented the edge split operation and describe any interesting implementation / debugging tricks you have used.
+</b>
+<p>
+    The edge split operation was implemented first by getting all the relevant vertices and edges. There was a lot of edges and vertices to keep track of, so we drew a diagram, labelled it, and used that 
+    as inspiration, naming the points and edges accordingly. Then we split the edges by first creating a new vertex, new edges. For the vertices, we set their positions, while for all the edges, we redefine their next()
+    and their twin halfedges, which then sets their position. We tested it and it worked!
+</p>
+<br>
+
+
+<b>
+    Show screenshots of a mesh before and after some edge splits. 
+</b>
+<div align="middle">
+  <table style="width:100%">
+    <tr align="center">
+      <td>
+        <img src="images/Screenshot 2024-02-26 at 5.59.57 PM.jpg" align="middle" width="400px"/>
+        <figcaption>without split</figcaption>
+      </td>
+      <td>
+        <img src="images/Screenshot 2024-02-26 at 6.01.43 PM.jpg" align="middle" width="400px"/>
+        <figcaption>with split</figcaption>
+      </td>
+    </tr>
+
+  </table>
+</div>
+<br>
+
+
+<b>
+    Show screenshots of a mesh before and after a combination of both edge splits and edge flips.
+</b>
+<div align="middle">
+  <img src="images/Screenshot 2024-02-26 at 6.24.10 PM.jpg" align="middle" width="50%">
+</div>
+<br>
+
+
+<b>
+    Write about your eventful debugging journey, if you have experienced one.
+</b>
+<p>
+    We had a nice debugging journey... one of the mistakes we made was mixing up the iterators and the variables themselves. Another bug we faced 
+    and fixed was adding the condition for boundary face... without that condition we faced a bug. We also forgot to set the half-edge of the vertices and faces,
+    which led to some weird rendering results. 
+</p>
+<br>
+
+
+<b>
+    If you have implemented support for boundary edges, show screenshots of your implementation properly handling split operations on boundary edges.
+</b>
+<p>
+    no
+</p>
+<br>
+
+
+<h3 align="middle">Part 6: Loop Subdivision for Mesh Upsampling</h3>
+<b>
+  Briefly explain how you implemented the loop subdivision and describe any interesting implementation / debugging tricks you have used.
+</b>
+<p>
+    We strictly followed the implementation notes in the cpp file and the homework specification. We first calculate vertex positions (traversing through mesh and applying formula), store it in new position field,
+    Then we flip and split edges.
+    Then we update positions to according vertices. We didn't know there was a isnew field or newposition field and wasted a lot of time storing those information. We thought of a map and used lists/vectors to store old edges/vertices and tried to map new positions to vertices that hasn't been created yet. 
+    The trick is believe the problem is not that hard and read the docs.
+</p>
+<br>
+
+
+<b>
+  Take some notes, as well as some screenshots, of your observations on how meshes behave after loop subdivision. What happens to sharp corners and edges? Can you reduce this effect by pre-splitting some edges?
+</b>
+<p>
+    Around sharp edges there is an averaging of vertices and edges and the edges are not sharp anymore. 
+    We can pre-split edges (Adding more vertices and edges) near corners to make the splitting sharp. By adding more control points at critical intersection of surfaces, we can sharpen the edges by having more weight on the sharp edges and vertices.
+</p>
+<div align="middle">
+  <img src="images/Screenshot 2024-02-26 at 6.13.57 PM.jpg" align="middle" width="50%">
+</div>
+<div align="middle">
+  <img src="images/Screenshot 2024-02-26 at 7.06.46 PM.jpg" align="middle" width="50%">
+</div>
+
+<br>
+
+
+<b>
+  Load dae/cube.dae. Perform several iterations of loop subdivision on the cube. Notice that the cube becomes slightly asymmetric after repeated subdivisions. Can you pre-process the cube with edge flips and splits so that the cube subdivides symmetrically? Document these effects and explain why they occur. Also explain how your pre-processing helps alleviate the effects.
+</b>
+<p>
+    it becomes assymetric because the corner is sharper on the main verticies and the main diagnol all points one direction (top left to bottom right). This created an uneven weight when we do subdivision and update positions. (Certain positions are weighed more depending on how the mesh starts to be.)
+    To make it symmetric we can flip and split edges to prevent them from all orientating towards the same direction (top left to bottom right), maybe making an X shape on each face.
+</p>
+<br>
+
+
+<b>
+    If you have implemented any extra credit extensions, explain what you did and document how they work with screenshots.
+</b>
+<p>
+    no
+</p>
+<br>
+
+
+
+
+
+</body>
 </html>

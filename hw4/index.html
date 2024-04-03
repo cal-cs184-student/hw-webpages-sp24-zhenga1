@@ -23,7 +23,6 @@
   }
   .container {
     width: 1000px;
-    margin: 0 auto;
   }
 
   .full-width-div {
@@ -39,6 +38,11 @@
     font-family: "Poppins";
     color: #ffc073;
   }
+    a {
+        font-family: "Poppins";
+        color: #ffc073;
+        margin: 0 auto;
+    }
   td{
     color: #9bc3cf;
   }
@@ -72,16 +76,19 @@
 
 <body>
     <div class="container" >
-    <div style="background-color: #3d3d3d; padding-top: 40px;" class="full-width-div">
-        <h1 align="middle" style="margin-top: 0px;">CS 184: Computer Graphics and Imaging, Spring 2024</h1>
-        <h1 align="middle">Project 4: Cloth Simulator</h1>
-        <h2 align="middle" style="margin-bottom: 0px;">Aaron Zheng, Helena Su</h2>
-        <video  autoplay loop muted style="max-height: 600px;text-align: center;display: block; margin: auto;" >
-            <source src="images/gululu.mp4" video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <br /><br />
-    </div>
+        <div style="background-color: #3d3d3d; padding-top: 40px;" class="full-width-div">
+            <h1 align="middle" style="margin-top: 0px;">CS 184: Computer Graphics and Imaging, Spring 2024</h1>
+            <h1 align="middle">Project 4: Cloth Simulator</h1>
+            <h2 align="middle" style="margin-bottom: 0px;">Aaron Zheng, Helena Su</h2>
+            <video autoplay=autoplay loop=loop muted=muted style="max-height: 600px;text-align: center;display: block; margin: auto;">
+                <source src="images/gululu.mp4" video=video =/mp4" />
+                Your browser does not support the video tag.
+            </video>
+
+            <a align="middle" style="text-align: center; display: block; margin: auto;" href="https://cal-cs184-student.github.io/hw-webpages-sp24-zhenga1/hw4/index.html" target="_blank" title="Github Repo">Link To Webpage</a>
+
+            <br /><br />
+        </div>
 </div>
     <h1>Deliverables</h2>
     <h2>Part 1</h3>

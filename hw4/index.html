@@ -75,7 +75,7 @@
 
 
 <body>
-    <div class="container" >
+    <div class="container">
         <div style="background-color: #3d3d3d; padding-top: 40px;" class="full-width-div">
             <h1 align="middle" style="margin-top: 0px;">CS 184: Computer Graphics and Imaging, Spring 2024</h1>
             <h1 align="middle">Project 4: Cloth Simulator</h1>
@@ -86,323 +86,351 @@
             </video>
 
             <a align="middle" style="text-align: center; display: block; margin: auto;" href="https://cal-cs184-student.github.io/hw-webpages-sp24-zhenga1/hw4/index.html" target="_blank" title="Github Repo">Link To Webpage</a>
+            <a align="middle" style="text-align: center; display: block; margin: auto;" href="https://cal-cs184-student.github.io/hw-webpages-sp24-zhenga1/hw4/index.html" target="_blank" title="Github Repo">https://cal-cs184-student.github.io/hw-webpages-sp24-zhenga1/hw4/index.html</a>
 
             <br /><br />
         </div>
-</div>
-    <h1>Deliverables</h2>
-    <h2>Part 1</h3>
-    <ul>
-        <li class="question">Take some screenshots of <em>scene/pinned2.json</em> from a viewing angle where you can clearly see the cloth wireframe to show the structure of your point masses and springs.</li>
-        <liclass="question">Show us what the wireframe looks like (1) without any shearing constraints, (2) with only shearing constraints, and (3) with all constraints.</li>
-    </ul>
-    <table>
-        <!-- Add a border for visibility -->
-        <tr>
-            <td>Imaging with ALL Constraints</td>
-            <td>Imaging without Shearing Constraints</td>
-            <td>Imaging with only Shear Constraints</td>
-        </tr>
-        <tr>
-            <!-- Table Row -->
-            <td><img src="images/task1_all.jpg" alt="Imaging with ALL Constraints" /></td>
-            <td><img src="images/task1_noshear.png" alt="Imaging without Shearing Constraints, with all other Constraints" /></td>
-            <td><img src="images/task1_shearonly.jpg" alt="Imaging with only Shear Constraints" /></td>
-        </tr>
-    </table>
-    <h2>Part 2</h3>
-    <ul>
-        <li class="question">
-            Experiment with some the parameters in the simulation. To do so, pause the simulation at the start with <code>P</code>, modify the values of interest, and then resume by pressing <code>P</code> again. You can also restart the simulation at any time from the cloth's starting position by pressing <code>R</code>.
-                                                                                                                                                                                                                                                                                <ul>
-                                                                                                                                                                                                                                                                                    <li>Describe the effects of changing the spring constant <code>ks</code>; how does the cloth behave from start to rest with a very low <code>ks</code>? A high <code>ks</code>?</li>
-                                                                                                                                                                                                                                                                                    <br />
-                                                                                                                                                                                                                                                                                    <p class="answer">For low ks, the cloth falls faster and in a much more stable manner, and the cloth is also much more perturbed in the steady state(i.e. More wrinkled). For high ks, the cloth falls slower, and the cloth’s steady state position (as it finishes falling) is much less wrinkled.</p>
-                                                                                                                                                                                                                                                                                    <br />
-                                                                                                                                                                                                                                                                                    <br />
-                                                                                                                                                                                                                                                                                    <li>What about for <code>density</code>?</li>
-                                                                                                                                                                                                                                                                                    <br />
-                                                                                                                                                                                                                                                                                    <p class="answer">For high density, the cloth falls faster and in a much more stable manner, and the cloth is also much more perturbed in the steady state(i.e. More wrinkled). For low density, the cloth falls slower, and the cloth’s steady state position (as it finishes falling) is much less wrinkled.</p>
-                                                                                                                                                                                                                                                                                    <br />
-                                                                                                                                                                                                                                                                                    <br />
-                                                                                                                                                                                                                                                                                    <li>What about for <code>damping</code>?</li>
-                                                                                                                                                                                                                                                                                    <br />
-                                                                                                                                                                                                                                                                                    <p class="answer">For the highest damping, the cloth falls very slowly and never quite reaches the steady state. The cloth is also very unperturbed in the steady state(i.e. Less wrinkled). For low damping, the cloth looks very wrinkled, and the cloth oscillates many times across the vertical steady state position before reaching its steady state position, as the kinetic energy takes a while to dissipate(as it finishes falling). The finished state is also much more wrinkled, as the cloth is much more perturbed.</p>
-                                                                                                                                                                                                                                                                                    <br />
-                                                                                                                                                                                                                                                                                    <br />
-                                                                                                                                                                                                                                                                                    <li>For each of the above, observe any noticeable differences in the cloth compared to the default parameters and show us some screenshots of those interesting differences and describe when they occur.</li>
-                                                                                                                                                                                                                                                                                    <p class="answer">for higher ks, the cloth looks harder and stiffer. for higher density, the cloth looks wet and heavier, so it drags down. for high damp, the cloth doesn't have the energy to make extra moves like bouncing or swinging. It gets to the resting position in the most straightfoward way. </p>
+    </div>
+    <h1>Overview</h1>
+    In this project, we worked on the realistic rendering of a cloth and its interactions with spheres. We also worked on various textures and shaders to make the cloth look better and more visually aesthetic.
+    <br /><br />
+    For this project, we defined a simplistic physical model to define the motion of vertices in the cloth, utilising three physical constraints, <b>Structural, Shearing, Bending</b> and defining them as string forces, akin to the real-world cloth. We also introduced real forces like gravity. We used verlet integration to calculate new positions from previous positions and forces.
+    <br /><br />
+    For rendering, we defined a pipeline to calculate the intensity of pixels given light sources. We also used GLSL to customize our own shaders, making our rendering look more unique.
+    <h1>
+        Deliverables</h2>
+        <h2>
+            Part 1</h3>
+            <ul>
+                <li class="question">Take some screenshots of <em>scene/pinned2.json</em> from a viewing angle where you can clearly see the cloth wireframe to show the structure of your point masses and springs.</li>
+                <liclass ="question">
+                    Show us what the wireframe looks like (1) without any shearing constraints, (2) with only shearing constraints, and (3) with all constraints.</li>
+                </liclass>
+            </ul>
+            <table>
+                <!-- Add a border for visibility -->
+                <tr>
+                    <td>Imaging with ALL Constraints</td>
+                    <td>Imaging without Shearing Constraints</td>
+                    <td>Imaging with only Shear Constraints</td>
+                </tr>
+                <tr>
+                    <!-- Table Row -->
+                    <td><img src="images/task1_all.jpg" alt="Imaging with ALL Constraints" /></td>
+                    <td><img src="images/task1_noshear.png" alt="Imaging without Shearing Constraints, with all other Constraints" /></td>
+                    <td><img src="images/task1_shearonly.jpg" alt="Imaging with only Shear Constraints" /></td>
+                </tr>
+            </table>
+            <h2>
+                Part 2</h3>
+                <ul>
+                    <li class="question">
+                        Experiment with some the parameters in the simulation. To do so, pause the simulation at the start with <code>P</code>, modify the values of interest, and then resume by pressing <code>P</code> again. You can also restart the simulation at any time from the cloth's starting position by pressing <code>R</code>.
+                        <ul>
+                            <li>Describe the effects of changing the spring constant <code>ks</code>; how does the cloth behave from start to rest with a very low <code>ks</code>? A high <code>ks</code>?</li>
+                            <br />
+                            <p class="answer">For low ks, the cloth falls faster and in a much more stable manner, and the cloth is also much more perturbed in the steady state(i.e. More wrinkled). For high ks, the cloth falls slower, and the cloth’s steady state position (as it finishes falling) is much less wrinkled.</p>
+                            <br />
+                            <br />
+                            <li>What about for <code>density</code>?</li>
+                            <br />
+                            <p class="answer">For high density, the cloth falls faster and in a much more stable manner, and the cloth is also much more perturbed in the steady state(i.e. More wrinkled). For low density, the cloth falls slower, and the cloth’s steady state position (as it finishes falling) is much less wrinkled.</p>
+                            <br />
+                            <br />
+                            <li>What about for <code>damping</code>?</li>
+                            <br />
+                            <p class="answer">For the highest damping, the cloth falls very slowly and never quite reaches the steady state. The cloth is also very unperturbed in the steady state(i.e. Less wrinkled). For low damping, the cloth looks very wrinkled, and the cloth oscillates many times across the vertical steady state position before reaching its steady state position, as the kinetic energy takes a while to dissipate(as it finishes falling). The finished state is also much more wrinkled, as the cloth is much more perturbed.</p>
+                            <br />
+                            <br />
+                            <li>For each of the above, observe any noticeable differences in the cloth compared to the default parameters and show us some screenshots of those interesting differences and describe when they occur.</li>
+                            <p class="answer">for higher ks, the cloth looks harder and stiffer. for higher density, the cloth looks wet and heavier, so it drags down. for high damp, the cloth doesn't have the energy to make extra moves like bouncing or swinging. It gets to the resting position in the most straightfoward way. </p>
 
-                                                                                                                                                                                                                                                                                </ul>
-        </li>
-        <br/>
-        <b>All of these images are generated with default parameters, except for the specified parameter(ex. density).</b>
-        <br />
-        <br />
-        <table>
-            <tr>
-                <td>High Damping</td>
-                <td>High Density</td>
-                <td>High Spring Constant</td>
-            </tr>
-            <tr>
-                <td><img src="images/task2_highdamp_slowfall.jpg" /></td>
-                <td><img src="images/task2_highdensity.jpg" /></td>
-                <td><img src="images/task2_highks.jpg" /></td>
-            </tr>
-            <tr>
-                <td>Low Damping</td>
-                <td>Low Density</td>
-                <td>Low Spring Constant</td>
-            </tr>
-            <tr>
-                <td><img src="images/task2_lowdamp_swingweeeee.jpg" /></td>
-                <td><img src="images/task2_lowdensity.jpg" /></td>
-                <td><img src="images/task2_lowks.jpg" /></td>
-            </tr>
-        </table>
-        <li class="question">Show us a screenshot of your shaded cloth from <em>scene/pinned4.json</em> in its final resting state! If you choose to use different parameters than the default ones, please list them.</li>
-        <br />
-        <br />
-        <img src="images/task2_pinned4.jpg"style="text-align: center;display: block; margin: auto;"/>
-    </ul>
-    <h2>Part 3</h3>
-    <ul>
-        <li class="question">Show us screenshots of your shaded cloth from <em>scene/sphere.json</em> in its final resting state on the sphere using the default <code>ks = 5000</code> as well as with <code>ks = 500</code> and <code>ks = 50000</code>. Describe the differences in the results.</li>
-        <br />
-        <br />
-        <table>
-            <tr>
-                <td>Ks = 500</td>
-                <td>Ks = 5000</td>
-                <td>Ks = 50000</td>
-            </tr>
-            <tr>
-                <td><img src="images/task3_500ks.jpg" /></td>
-                <td><img src="images/task3_5000ks.jpg" /></td>
-                <td><img src="images/task3_50000ks.jpg" /></td>
-            </tr>
-        </table>
-        <br />
-        <br />
-        We can see that the bigger the spring constant, the less “draped”, i.e. vertical the cloth appears to be. With the case where ks=5000, the cloth is almost entirely vertically draped on the sides of the ball, whereas for ks = 50000 the cloth is basically somewhat hovering, rather than completely horizontal. The reason for this is that gravity is pulling the cloth downwards as it hangs over the ball, thereby stretching the cloth. However, the spring force resists stretching and perturbations in the cloth’s shape. As Ks increases, the spring force is stronger, so the cloth resists perturbations by gravity, and thus does not tend to drape completely vertically over the ball. Similarly, the opposite can be said for when Ks decreases, leading to the results seen.
-        <br />
-        <br />
-        <li class="question">Show us a screenshot of your shaded cloth lying peacefully at rest on the plane. If you haven't by now, feel free to express your colorful creativity with the cloth! (You will need to complete the shaders portion first to show custom colors.)</li>
-        <br />
-        <img src="images/task3_plane.jpg" style="text-align: center;display: block; margin: auto;"/>
-    </ul>
-    <h2>Part 4</h3>
-    <ul>
-        <li class="question">Show us at least 3 screenshots that document how your cloth falls and folds on itself, starting with an early, initial self-collision and ending with the cloth at a more restful state (even if it is still slightly bouncy on the ground).</li>
-        <table>
-            <br />
-            <tr>
-                <td><b>Starting Positions of the Cloth</b></td>
-            </tr>
-            <tr>
-                <td><img src="images/task4_1.jpg" /></td>
-                <td><img src="images/task4_2.jpg" /></td>
-            </tr>
-            <br />
-            <tr>
-                <td><b>Finishing Positions of the Cloth</b></td>
-            </tr>
-            <tr>
-                <td><img src="images/task4_3.jpg" /></td>
-                <td><img src="images/task4_4.jpg" /></td>
-            </tr>
-        </table>
+                        </ul>
+                    </li>
+                    <br />
+                    <b>All of these images are generated with default parameters, except for the specified parameter(ex. density).</b>
+                    <br />
+                    <br />
+                    <table>
+                        <tr>
+                            <td>High Damping</td>
+                            <td>High Density</td>
+                            <td>High Spring Constant</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/task2_highdamp_slowfall.jpg" /></td>
+                            <td><img src="images/task2_highdensity.jpg" /></td>
+                            <td><img src="images/task2_highks.jpg" /></td>
+                        </tr>
+                        <tr>
+                            <td>Low Damping</td>
+                            <td>Low Density</td>
+                            <td>Low Spring Constant</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/task2_lowdamp_swingweeeee.jpg" /></td>
+                            <td><img src="images/task2_lowdensity.jpg" /></td>
+                            <td><img src="images/task2_lowks.jpg" /></td>
+                        </tr>
+                    </table>
+                    <li class="question">Show us a screenshot of your shaded cloth from <em>scene/pinned4.json</em> in its final resting state! If you choose to use different parameters than the default ones, please list them.</li>
+                    <br />
+                    <br />
+                    <img src="images/task2_pinned4.jpg" style="text-align: center;display: block; margin: auto;" />
+                </ul>
+                <h2>
+                    Part 3</h3>
+                    <ul>
+                        <li class="question">Show us screenshots of your shaded cloth from <em>scene/sphere.json</em> in its final resting state on the sphere using the default <code>ks = 5000</code> as well as with <code>ks = 500</code> and <code>ks = 50000</code>. Describe the differences in the results.</li>
+                        <br />
+                        <br />
+                        <table>
+                            <tr>
+                                <td>Ks = 500</td>
+                                <td>Ks = 5000</td>
+                                <td>Ks = 50000</td>
+                            </tr>
+                            <tr>
+                                <td><img src="images/task3_500ks.jpg" /></td>
+                                <td><img src="images/task3_5000ks.jpg" /></td>
+                                <td><img src="images/task3_50000ks.jpg" /></td>
+                            </tr>
+                        </table>
+                        <br />
+                        <br />
+                        We can see that the bigger the spring constant, the less “draped”, i.e. vertical the cloth appears to be. With the case where ks=5000, the cloth is almost entirely vertically draped on the sides of the ball, whereas for ks = 50000 the cloth is basically somewhat hovering, rather than completely horizontal. The reason for this is that gravity is pulling the cloth downwards as it hangs over the ball, thereby stretching the cloth. However, the spring force resists stretching and perturbations in the cloth’s shape. As Ks increases, the spring force is stronger, so the cloth resists perturbations by gravity, and thus does not tend to drape completely vertically over the ball. Similarly, the opposite can be said for when Ks decreases, leading to the results seen.
+                        <br />
+                        <br />
+                        <li class="question">Show us a screenshot of your shaded cloth lying peacefully at rest on the plane. If you haven't by now, feel free to express your colorful creativity with the cloth! (You will need to complete the shaders portion first to show custom colors.)</li>
+                        <br />
+                        <img src="images/task3_plane.jpg" style="text-align: center;display: block; margin: auto;" />
+                    </ul>
+                    <h2>
+                        Part 4</h3>
+                        <ul>
+                            <li class="question">Show us at least 3 screenshots that document how your cloth falls and folds on itself, starting with an early, initial self-collision and ending with the cloth at a more restful state (even if it is still slightly bouncy on the ground).</li>
+                            <table>
+                                <br />
+                                <tr>
+                                    <td><b>Starting Positions of the Cloth</b></td>
+                                </tr>
+                                <tr>
+                                    <td><img src="images/task4_1.jpg" /></td>
+                                    <td><img src="images/task4_2.jpg" /></td>
+                                </tr>
+                                <br />
+                                <tr>
+                                    <td><b>Finishing Positions of the Cloth</b></td>
+                                </tr>
+                                <tr>
+                                    <td><img src="images/task4_3.jpg" /></td>
+                                    <td><img src="images/task4_4.jpg" /></td>
+                                </tr>
+                            </table>
 
-        <li class="question">Vary the <code>density</code> as well as <code>ks</code> and describe with words and screenshots how they affect the behavior of the cloth as it falls on itself.</li>
-        <br />
-        <br />
-        We see that, the more dense the cloth is, the more the cloth tends to resist going towards a more flat and smooth surface shape, and tends to stay bent and sheared. In other words, the denser the cloth, it appears the more viscous the cloth is, as it would fold and perturb against itself rather than fall flat and smooth (can be seen from the images). I argue that this is because, although the flatter and smoother shape is more stable, for a greater density object, it requires a greater amount of spring force per unit area to be able to smoothen the shape. But, if the spring constants are the same, the spring force of the cloth may not be enough to force the cloth into a smoother shape. This is why the cloth remains in an unsmooth and unstable state for higher density, and is very smooth when density of the cloth is low.
-        <br />
-        <br />
-        For higher spring constants Ks, we see that the spring forces per unit area of the cloth is increased without changing the density. So, based on previous explanations, we should expect the spring constant to have an opposite effect compared to the density of the cloth, where a higher spring constant leads to a more smooth cloth, and vice versa. This is indeed what is observed. So we argue that a higher spring constant increases smoothness in the cloth, and the opposite is true for density of the cloth.
-        <br />
-        <br />
-        <table>
-            <tr>
-                <td>High Density</td>
-                <td>High Spring Constant</td>
-            </tr>
-            <tr>
-                <td><img src="images/task4_high_density.jpg" /></td>
-                <td><img src="images/task4_high_ks.jpg" /></td>
-            </tr>
-            <tr>
-                <td>Low Density</td>
-                <td>Low Spring Constant</td>
-            </tr>
-            <tr>
-                <td><img src="images/task4_low_density.jpg" /></td>
-                <td><img src="images/task4_low_ks.jpg" /></td>
-            </tr>
-        </table>
-    </ul>
-    <h2>Part 5</h3>
-    <ul>
-        <li class="question">Explain in your own words what is a shader program and how vertex and fragment shaders work together to create lighting and material effects.</li>
-        <br />
-        <br />
-        A shader program is basically a program that, for a given set of inputs, takes in various parameters of a vertex (such as its normal, its position and tangent), and returns a color that describes the color that the vertex should be rendered with. When a shader is selected, every single pixel vertex and their parameters are passed into the selected shader, and the resulting image is rendered from the result of this shader program at every pixel. By customizing the shader program, we can achieve various desired types of appearances that the scene will resemble. For example, Blin Phong Shading will make the scene bright, while also including aspects of spectral shading, making the ray direction that is closest to the reflected direction (of the light ray) very bright. Toon shading will make the scene look very simplistic and like it came from a cartoon.
-        <br />
-        <br />
-        Vertex shading takes in a vertex position and applies a transformation in the position of the relevant vertex variables like normal and position before passing the result into the fragment shader. It can act as a preprocessing unit, while the fragment shader is the main processing unit that does the returning of the color.
-        <br />
-        <br />
-        Fragment shading takes in relevant vertex variables like position and normal obtained from the vertex shader and calculates the resulting color of that specific pixel that was originally passed into the vector shader. Usually fragment shaders take in one pixel to be processed, which may not be the original pixel passed into the vertex shader but a transformed version.
-        <br />
-        <br />
-        <li class="question">Explain the Blinn-Phong shading model in your own words. Show a screenshot of your Blinn-Phong shader outputting only the ambient component, a screen shot only outputting the diffuse component, a screen shot only outputting the specular component, and one using the entire Blinn-Phong model.</li>
-        <br />
-        <br />
-        Blinn-Phong shading is a comprehensive form of shading that includes ambience shading, diffuse shading, and specular shading. Ambience shading guarantees that the scene will be always partially lit everywhere, whereas diffuse shading will ensure that properly lit up areas of the scene are brighter than dimly lit areas, regardless of the direction of sight, as light rays that arrive at those points will sometimes scatter, brightening those points regardless of viewing direction.
-        <br />
-        <br />
-        Specular shading guarantees that certain viewing angles that are very close to the angle of reflection of the light will be brighter, which makes sense as light will more likely travel along the angle of reflection than other angles.
-        <br />
-        <br />
-        Put together, the Blinn Phong shading is a computationally cheap way to render a scene realistically, taking into account ambient, diffuse and specular lighting.
-        <br />
-        <br />
-        <b>Blinn Phong Shader Rendered Images</b>
-        <br />
-        <br />
-        <table>
-            <tr>
-                <td>Only Ambient </td>
-                <td>Only Diffuse</td>
-            </tr>
-            <tr>
-                <td><img src="images/task5_phong_ambient.jpg" /></td>
-                <td><img src="images/task5_phong_diffuse.jpg" /></td>
-            </tr>
-            <tr>
-                <td>Only Specular</td>
-                <td>Entire Model</td>
-            </tr>
-            <tr>
-                <td><img src="images/task5_phong_specular.jpg" /></td>
-                <td><img src="images/task5_phong.jpg" /></td>
-            </tr>
-        </table>
-        <br />
-        <br />
-        <li class="question">Show a screenshot of your texture mapping shader using your own custom texture by modifying the textures in <code>/textures/</code>.</li>
-        <br />
-        <br />
-        <table>
-            <tr>
-                <u>We used a rainbowy scatter texture and these are screenshots from two different angles</u>
-                <td><img src="images/task5_texture.jpg"</td>
-                <td><img src="images/task5_texure2.jpg"</td>
-            </tr>
-        </table>
-        <br />
-        <br />
-        <li class="question">Show a screenshot of bump mapping on the cloth and on the sphere. Show a screenshot of displacement mapping on the sphere. Use the same texture for both renders. You can either provide your own texture or use one of the ones in the textures directory, BUT choose one that's not the default <code>texture_2.png</code>. Compare the two approaches and resulting renders in your own words. Compare how your the two shaders react to the sphere by changing the sphere mesh's coarseness by using <code>-o 16 -a 16</code> and then <code>-o 128 -a 128</code>.</li>
-        <br />
-        <br />
-        <table>
-            <tr>
-                <td>Bump Mapping on Cloth </td>
-                <td>Bump Mapping on Sphere</td>
-            </tr>
-            <tr>
-                <td><img src="images/task5_bump_berkeley.jpg" /></td>
-                <td><img src="images/task5_bump_sphere.jpg" /></td>
-            </tr>
-            <tr>
-                <td>Displacement Mapping on Cloth</td>
-                <td>Displacement Mapping on Sphere</td>
-            </tr>
-            <tr>
-                <td><img src="images/task5_displacement2.jpg" /></td>
-                <td><img src="images/task5_displacement_sphere.jpg" /></td>
-            </tr>
-        </table>
-        <br />
-        <br />
-        <table>
-            <tr>
-                <td>Bump: More Coarse, oa=16 </td>
-                <td>Bump: Less Coarse, oa=128 </td>
-            </tr>
-            <tr>
-                <td><img src="images/task5_bump_oa16.jpg" /></td>
-                <td><img src="images/task5_bump_oa128.jpg" /></td>
-            </tr>
-            <tr>
-                <td>Displacement More Coarse, oa=16</td>
-                <td>Displacement Less Coarse, oa=128</td>
-            </tr>
-            <tr>
-                <td><img src="images/task5_displacement_oa16.jpg" /></td>
-                <td><img src="images/task5_displacement_oa128.jpg" /></td>
-            </tr>
-        </table>
-        <br />
-        <br />
-        We see that, for bump mapping, the rendering looks a lot more mildly perturbed based on the shape of the texture, as it looks like the positions of the vertices has not been altered much, whereas for the case of displacement mapping, the rendering is a lot more perturbed based on the shape of the texture.
-        <br />
-        <br />
-        This is a simple consequence of the definition of the two renderings. The bump mapping procedure only changes the vertex normals and does not change the actual positions of the vertices, thus only giving the illusion of a perturbation in the cloth fabric. This illusion is caused by varied brightness of vertices on the cloth fabric, not that the actual positions of the vertices are changed. However, for displacement mapping, this situation is completely different… the actual positions of the vertices are changed as v_position is changed, the consequence of this is that the final result looks much more perturbed than the case of the bump mapping.
-        <br />
-        <br />
-        In general, we see that for both the bump and displacement case, the oa parameters control the granularity of the noise and information being applied to the rendering. The higher oa parameters leads to the image looking more fine and less noisy, and the lower oa parameters leads to the opposite. We see this somewhat clearly for the bump case as the right image is slightly more detailed, although this effect is not incredibly apparent. For the case of the displacement, the effect is very pronounced, as the more coarse image has much more flat surfaces, but the less coarse image is much more pronounced, where the vertices are much more (spiky), which indicates that the texture mapping is being sampled at a denser rate, unlike the more coarse image for which the displacement seems as if it is an averaged over the texture mapping.
+                            <li class="question">Vary the <code>density</code> as well as <code>ks</code> and describe with words and screenshots how they affect the behavior of the cloth as it falls on itself.</li>
+                            <br />
+                            <br />
+                            We see that, the more dense the cloth is, the more the cloth tends to resist going towards a more flat and smooth surface shape, and tends to stay bent and sheared. In other words, the denser the cloth, it appears the more viscous the cloth is, as it would fold and perturb against itself rather than fall flat and smooth (can be seen from the images). I argue that this is because, although the flatter and smoother shape is more stable, for a greater density object, it requires a greater amount of spring force per unit area to be able to smoothen the shape. But, if the spring constants are the same, the spring force of the cloth may not be enough to force the cloth into a smoother shape. This is why the cloth remains in an unsmooth and unstable state for higher density, and is very smooth when density of the cloth is low.
+                            <br />
+                            <br />
+                            For higher spring constants Ks, we see that the spring forces per unit area of the cloth is increased without changing the density. So, based on previous explanations, we should expect the spring constant to have an opposite effect compared to the density of the cloth, where a higher spring constant leads to a more smooth cloth, and vice versa. This is indeed what is observed. So we argue that a higher spring constant increases smoothness in the cloth, and the opposite is true for density of the cloth.
+                            <br />
+                            <br />
+                            <table>
+                                <tr>
+                                    <td>High Density</td>
+                                    <td>High Spring Constant</td>
+                                </tr>
+                                <tr>
+                                    <td><img src="images/task4_high_density.jpg" /></td>
+                                    <td><img src="images/task4_high_ks.jpg" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Low Density</td>
+                                    <td>Low Spring Constant</td>
+                                </tr>
+                                <tr>
+                                    <td><img src="images/task4_low_density.jpg" /></td>
+                                    <td><img src="images/task4_low_ks.jpg" /></td>
+                                </tr>
+                            </table>
+                        </ul>
+                        <h2>
+                            Part 5</h3>
+                            <ul>
+                                <li class="question">Explain in your own words what is a shader program and how vertex and fragment shaders work together to create lighting and material effects.</li>
+                                <br />
+                                <br />
+                                A shader program is basically a program that, for a given set of inputs, takes in various parameters of a vertex (such as its normal, its position and tangent), and returns a color that describes the color that the vertex should be rendered with. When a shader is selected, every single pixel vertex and their parameters are passed into the selected shader, and the resulting image is rendered from the result of this shader program at every pixel. By customizing the shader program, we can achieve various desired types of appearances that the scene will resemble. For example, Blin Phong Shading will make the scene bright, while also including aspects of spectral shading, making the ray direction that is closest to the reflected direction (of the light ray) very bright. Toon shading will make the scene look very simplistic and like it came from a cartoon.
+                                <br />
+                                <br />
+                                Vertex shading takes in a vertex position and applies a transformation in the position of the relevant vertex variables like normal and position before passing the result into the fragment shader. It can act as a preprocessing unit, while the fragment shader is the main processing unit that does the returning of the color.
+                                <br />
+                                <br />
+                                Fragment shading takes in relevant vertex variables like position and normal obtained from the vertex shader and calculates the resulting color of that specific pixel that was originally passed into the vector shader. Usually fragment shaders take in one pixel to be processed, which may not be the original pixel passed into the vertex shader but a transformed version.
+                                <br />
+                                <br />
+                                <li class="question">Explain the Blinn-Phong shading model in your own words. Show a screenshot of your Blinn-Phong shader outputting only the ambient component, a screen shot only outputting the diffuse component, a screen shot only outputting the specular component, and one using the entire Blinn-Phong model.</li>
+                                <br />
+                                <br />
+                                Blinn-Phong shading is a comprehensive form of shading that includes ambience shading, diffuse shading, and specular shading. Ambience shading guarantees that the scene will be always partially lit everywhere, whereas diffuse shading will ensure that properly lit up areas of the scene are brighter than dimly lit areas, regardless of the direction of sight, as light rays that arrive at those points will sometimes scatter, brightening those points regardless of viewing direction.
+                                <br />
+                                <br />
+                                Specular shading guarantees that certain viewing angles that are very close to the angle of reflection of the light will be brighter, which makes sense as light will more likely travel along the angle of reflection than other angles.
+                                <br />
+                                <br />
+                                Put together, the Blinn Phong shading is a computationally cheap way to render a scene realistically, taking into account ambient, diffuse and specular lighting.
+                                <br />
+                                <br />
+                                <b>Blinn Phong Shader Rendered Images</b>
+                                <br />
+                                <br />
+                                <table>
+                                    <tr>
+                                        <td>Only Ambient </td>
+                                        <td>Only Diffuse</td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="images/task5_phong_ambient.jpg" /></td>
+                                        <td><img src="images/task5_phong_diffuse.jpg" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Only Specular</td>
+                                        <td>Entire Model</td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="images/task5_phong_specular.jpg" /></td>
+                                        <td><img src="images/task5_phong.jpg" /></td>
+                                    </tr>
+                                </table>
+                                <br />
+                                <br />
+                                <li class="question">Show a screenshot of your texture mapping shader using your own custom texture by modifying the textures in <code>/textures/</code>.</li>
+                                <br />
+                                <br />
+                                <table>
+                                    <tr>
+                                        <u>We used a rainbowy scatter texture and these are screenshots from two different angles</u>
+                                        <td><img src="images/task5_texture.jpg"</td>
+                                        <td><img src="images/task5_texure2.jpg"</td>
+                                    </tr>
+                                </table>
+                                <br />
+                                <br />
+                                <li class="question">Show a screenshot of bump mapping on the cloth and on the sphere. Show a screenshot of displacement mapping on the sphere. Use the same texture for both renders. You can either provide your own texture or use one of the ones in the textures directory, BUT choose one that's not the default <code>texture_2.png</code>. Compare the two approaches and resulting renders in your own words. Compare how your the two shaders react to the sphere by changing the sphere mesh's coarseness by using <code>-o 16 -a 16</code> and then <code>-o 128 -a 128</code>.</li>
+                                <br />
+                                <br />
+                                <table>
+                                    <tr>
+                                        <td>Bump Mapping on Cloth </td>
+                                        <td>Bump Mapping on Sphere</td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="images/task5_bump_berkeley.jpg" /></td>
+                                        <td><img src="images/task5_bump_sphere.jpg" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Displacement Mapping on Cloth</td>
+                                        <td>Displacement Mapping on Sphere</td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="images/task5_displacement2.jpg" /></td>
+                                        <td><img src="images/task5_displacement_sphere.jpg" /></td>
+                                    </tr>
+                                </table>
+                                <br />
+                                <br />
+                                <table>
+                                    <tr>
+                                        <td>Bump: More Coarse, oa=16 </td>
+                                        <td>Bump: Less Coarse, oa=128 </td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="images/task5_bump_oa16.jpg" /></td>
+                                        <td><img src="images/task5_bump_oa128.jpg" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Displacement More Coarse, oa=16</td>
+                                        <td>Displacement Less Coarse, oa=128</td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="images/task5_displacement_oa16.jpg" /></td>
+                                        <td><img src="images/task5_displacement_oa128.jpg" /></td>
+                                    </tr>
+                                </table>
+                                <br />
+                                <br />
+                                We see that, for bump mapping, the rendering looks a lot more mildly perturbed based on the shape of the texture, as it looks like the positions of the vertices has not been altered much, whereas for the case of displacement mapping, the rendering is a lot more perturbed based on the shape of the texture.
+                                <br />
+                                <br />
+                                This is a simple consequence of the definition of the two renderings. The bump mapping procedure only changes the vertex normals and does not change the actual positions of the vertices, thus only giving the illusion of a perturbation in the cloth fabric. This illusion is caused by varied brightness of vertices on the cloth fabric, not that the actual positions of the vertices are changed. However, for displacement mapping, this situation is completely different… the actual positions of the vertices are changed as v_position is changed, the consequence of this is that the final result looks much more perturbed than the case of the bump mapping.
+                                <br />
+                                <br />
+                                In general, we see that for both the bump and displacement case, the oa parameters control the granularity of the noise and information being applied to the rendering. The higher oa parameters leads to the image looking more fine and less noisy, and the lower oa parameters leads to the opposite. We see this somewhat clearly for the bump case as the right image is slightly more detailed, although this effect is not incredibly apparent. For the case of the displacement, the effect is very pronounced, as the more coarse image has much more flat surfaces, but the less coarse image is much more pronounced, where the vertices are much more (spiky), which indicates that the texture mapping is being sampled at a denser rate, unlike the more coarse image for which the displacement seems as if it is an averaged over the texture mapping.
 
-        <br />
-        <br />
-        <li class="question">Show a screenshot of your mirror shader on the cloth and on the sphere.</li>
-        <br />
-        <br />
-        <table>
-            <tr>
-                <td>Mirror Shader on Cloth</td>
-                <td>Mirror Shader on Sphere</td>
-            </tr>
-            <tr>
-                <td><img src="images/task5_mirror.jpg"</td>
-                <td><img src="images/task5_mirror_sphere.jpg"</td>
-            </tr>
-        </table>
-        <br />
-        <br />
-        <li class="question">Explain what you did in your custom shader, if you made one.</li>
-        <br />
-        <br />
-        <h3>1. Toon Shading</h3>
-        In Toon Shading, we made a shader that made the scene look like it is from a cartoon. The way we did it is by discretizing the color that is returned based on the intensity of the light intensity that arrived at the point. This way, we make the transitions in brightness discontinuous, making the rendered image look hand drawn.
-        <br />
-        <br />
-        <table>
-            <tr>
-                <td>Toon Shading, Scene: Sphere + Cloth</td>
-                <td>Toon Shading, Cloth</td>
-            </tr>
-            <tr>
-                <td><img src="images/task5_custom1.png"</td>
-                <td><img src="images/task5_custom2.jpg"</td>
-            </tr>
-        </table>
-        <h3>2. iridescent shader</h3>
-    <img src = "images/iridescent.gif"  style="width: 600px; height: auto; max-width: none; max-height: none; text-align: center;display: block; margin: auto;">
-    <p>First, I want the cloth to show different color when I rotate the camera view. To do that, in texture sampling (a rainbow texture), I included camera direction in the input v_uv, which means rotating camera changes the uv input that I sample with.
-        Then, the cloth is now a smooth rainbow cloth whose color shifts when I rotate the camera. To add some grainy and wavy effect, I used a texture map called Perlin noise which alters the normal. In addition to camera direction, the v_uv input to the sample texture is also dependent on the altered normal. 
-        The perlin noise texture is found here. https://medium.com/@sunnless/iridescent-shader-breakdown-c87ec5fe1e2a
-    </p>
-    </ul>
-    
-    <h3>Part 6 (Extra credit)</h3>
-    <ul>
-        <li class="question">If you implemented any additional technical features for the cloth simulation, clearly describe what you did and provide screenshots that illustrate your work. If it is an improvement compared to something already existing on the cloth simulation, compare and contrast them both in words and in images.</li>
-        <p>
-    Our additional techical features are shown above, where we implemented two custom shaders, the toon shader and the iridescent shader.
-</p>
-    </ul>
-        
+                                <br />
+                                <br />
+                                <li class="question">Show a screenshot of your mirror shader on the cloth and on the sphere.</li>
+                                <br />
+                                <br />
+                                <table>
+                                    <tr>
+                                        <td>Mirror Shader on Cloth</td>
+                                        <td>Mirror Shader on Sphere</td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="images/task5_mirror.jpg"</td>
+                                        <td><img src="images/task5_mirror_sphere.jpg"</td>
+                                    </tr>
+                                </table>
+                                <br />
+                                <br />
+                                <li class="question">Explain what you did in your custom shader, if you made one.</li>
+                                <br />
+                                <br />
+                                <h3>1. Toon Shading</h3>
+                                In Toon Shading, we made a shader that made the scene look like it is from a cartoon. The way we did it is by discretizing the color that is returned based on the intensity of the light intensity that arrived at the point. This way, we make the transitions in brightness discontinuous, making the rendered image look hand drawn.
+                                <br />
+                                <br />
+                                <table>
+                                    <tr>
+                                        <td>Toon Shading, Scene: Sphere + Cloth</td>
+                                        <td>Toon Shading, Cloth</td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="images/task5_custom1.png"</td>
+                                        <td><img src="images/task5_custom2.jpg"</td>
+                                    </tr>
+                                </table>
+                                <h3>2. iridescent shader</h3>
+                                <img src="images/iridescent.gif" style="width: 600px; height: auto; max-width: none; max-height: none; text-align: center;display: block; margin: auto;" />
+                                <p>
+                                    First, I want the cloth to show different color when I rotate the camera view. To do that, in texture sampling (a rainbow texture), I included camera direction in the input v_uv, which means rotating camera changes the uv input that I sample with.
+                                    Then, the cloth is now a smooth rainbow cloth whose color shifts when I rotate the camera. To add some grainy and wavy effect, I used a texture map called Perlin noise which alters the normal. In addition to camera direction, the v_uv input to the sample texture is also dependent on the altered normal.
+                                    The perlin noise texture is found here. https://medium.com/@sunnless/iridescent-shader-breakdown-c87ec5fe1e2a
+                                </p>
+                            </ul>
+
+                            <h3>Part 6 (Extra credit)</h3>
+                            <ul>
+                                <li class="question">If you implemented any additional technical features for the cloth simulation, clearly describe what you did and provide screenshots that illustrate your work. If it is an improvement compared to something already existing on the cloth simulation, compare and contrast them both in words and in images.</li>
+                                <p>
+                                    Our additional techical features are shown above, where we implemented two custom shaders, the toon shader and the iridescent shader.
+                                </p>
+                            </ul>
+
+                        </h2>
+
+                    </h2>
+
+                </h2>
+
+            </h2>
+
+        </h2>
+
+    </h1>
+
 </body>
 </html>
